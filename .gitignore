@@ -1,0 +1,27 @@
+/bin/
+/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+.vscode/
+.nuget/
+*.nupkg
+*.snupkg
+**/bin/
+**/obj/
+.idea/
+*.db
+appsettings.*.json
+appsettings.Development.json
+.env
+*.log
+*.vsdbg
+
+# Rider
+.idea/
+
+# Visual Studio cache/options
+*.VC.db
+*.VC.VC.opendb

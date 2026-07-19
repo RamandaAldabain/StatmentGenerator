@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="StatementGeneratorService.Api/StatementGeneratorService.Api.csproj" />
+  <Project Path="StatementGeneratorService.Application/StatementGeneratorService.Application.csproj" />
+  <Project Path="StatementGeneratorService.Domain/StatementGeneratorService.Domain.csproj" />
+  <Project Path="StatementGeneratorService.Infrastructure/StatementGeneratorService.Infrastructure.csproj" />
+</Solution>
