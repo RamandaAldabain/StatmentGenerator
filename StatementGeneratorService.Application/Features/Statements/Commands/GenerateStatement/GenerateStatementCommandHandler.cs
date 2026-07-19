@@ -4,7 +4,7 @@ using StatementGeneratorService.Application.Interfaces;
 namespace StatementGeneratorService.Application.Features.Statements.Commands.GenerateStatement
 {
 
-        public class GenerateStatementCommandHandler: IRequestHandler<GenerateStatementCommand, int>
+        public class GenerateStatementCommandHandler: IRequestHandler<GenerateStatementCommand, bool>
         {
 
             private readonly IStatementService _statementService;
@@ -17,11 +17,10 @@ namespace StatementGeneratorService.Application.Features.Statements.Commands.Gen
 
 
 
-            public async Task<int> Handle(GenerateStatementCommand request,CancellationToken cancellationToken)
+            public async Task<bool> Handle(GenerateStatementCommand request,CancellationToken cancellationToken)
             {
-
-                var statement =await _statementService.GenerateStatementAsync(request.CustomerId,request.Month,request.Year);
-                return statement.Id;
+                var result = await _statementService.GenerateStatementAsync(request.CustomerId, request.Month, request.Year);
+                return result;
             }
         }
         

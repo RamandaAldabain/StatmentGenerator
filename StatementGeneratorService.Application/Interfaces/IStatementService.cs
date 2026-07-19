@@ -8,6 +8,6 @@ namespace StatementGeneratorService.Application.Interfaces
     public interface IStatementService 
     {
         Task<StatementDto?> GetStatementAsync(int customerId, int month,int year);
-        Task<StatementDto> GenerateStatementAsync(int customerId, int month,int year);
+        Task<bool> GenerateStatementAsync(int customerId, int month, int year);
     }
 }

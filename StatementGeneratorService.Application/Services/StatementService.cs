@@ -55,12 +55,14 @@ namespace StatementGeneratorService.Application.Services
 
 
 
-        public async Task<StatementDto> GenerateStatementAsync(int customerId, int month, int year)
+        public async Task<bool> GenerateStatementAsync(int customerId, int month, int year)
         {
             _logger?.LogInformation("GenerateStatementAsync called for CustomerId={CustomerId} Month={Month} Year={Year}", customerId, month, year);
 
+            try
+            {
+
             // if a statement already exists for this customer/month/year return it
-            var existing = await GetStatementAsync(customerId, month, year);
 
             var customer = await _customerRepository.GetByIdWithAccountAsync(customerId);
 
@@ -77,7 +79,7 @@ namespace StatementGeneratorService.Application.Services
                 throw new Exception("Customer has no accounts");
             }
 
-            StatementDto? firstResult = null;
+            int? firstResultId = null;
 
             // generate/send statement for each account
             foreach (var acct in accounts)
@@ -88,7 +90,7 @@ namespace StatementGeneratorService.Application.Services
                     _logger?.LogInformation("Statement already exists for AccountId={AccountId} Month={Month} Year={Year}. Sending existing.", acct.Id, month, year);
                     var dto = MapToDto(existingForAccount);
                     await SendStatementEmail(customer, acct, dto);
-                    if (firstResult == null) firstResult = dto;
+                    if (firstResultId == null) firstResultId = existingForAccount.Id;
                     continue;
                 }
 
@@ -115,10 +117,16 @@ namespace StatementGeneratorService.Application.Services
                 var createdDto = MapToDto(stmt);
                 await SendStatementEmail(customer, acct, createdDto);
 
-                if (firstResult == null) firstResult = createdDto;
+                if (firstResultId == null) firstResultId = stmt.Id;
             }
 
-            return firstResult!;
+            return true;
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to generate statements for CustomerId={CustomerId}", customerId);
+                return false;
+            }
         }
         private async Task SendStatementEmail(Customer customer, Account account, StatementDto statement)
         {
