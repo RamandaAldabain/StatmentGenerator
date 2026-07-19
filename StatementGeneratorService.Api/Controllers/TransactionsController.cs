@@ -23,6 +23,7 @@ namespace StatementGeneratorService.Api.Controllers
         {
             _repository = repository;
             _transactionService = transactionService;
+            _accountRepository = accountRepository;
         }
 
 
