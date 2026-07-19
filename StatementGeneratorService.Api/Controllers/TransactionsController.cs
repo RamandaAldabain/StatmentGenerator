@@ -82,26 +82,8 @@ namespace StatementGeneratorService.Api.Controllers
         public async Task<IActionResult> Delete(
             int id)
         {
-            var transaction = await _repository.GetByIdAsync(id);
 
-            if (transaction == null)
-                return NotFound();
-
-            var account = await _accountRepository.GetByIdAsync(transaction.AccountId);
-            if (account != null)
-            {
-                if (transaction.Type == TransactionType.Deposit)
-                    account.Balance -= transaction.Amount;
-                else if (transaction.Type == TransactionType.Withdrawal)
-                    account.Balance += transaction.Amount;
-
-                _accountRepository.Update(account);
-            }
-
-            _repository.Delete(transaction);
-
-            await _repository.SaveChangesAsync();
-            await _accountRepository.SaveChangesAsync();
+            await _transactionService.DeleteTransactionAsync(id);
 
             return Ok("Transaction deleted successfully.");
         }
